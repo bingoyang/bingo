@@ -349,7 +349,9 @@ public class FacadeServiceImpl implements FacadeService {
 	public void updateServer(String jsonString) {
 		BzServer server = JsonUtils.fromJson(jsonString, BzServer.class);
 		bzInfoService.updateServer(server);
-		bzInfoService.updatePosters(server.getPosters());
+		if(server.getPosters()!=null&&!server.getPosters().isEmpty()){
+			bzInfoService.updatePosters(server.getPosters());
+		}
 	}
 
 	public List<BzServiceprovider> findBzServiceproviders(long pId) {
