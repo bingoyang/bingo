@@ -19,4 +19,8 @@ public class UserRoleDaoImpl extends HibernateBaseDaoImpl<UserRole,Long> impleme
         getSession().saveOrUpdate(userRole);
     }
 
+	public void deleteByPK(Long pk) {
+		
+	}
+
 }

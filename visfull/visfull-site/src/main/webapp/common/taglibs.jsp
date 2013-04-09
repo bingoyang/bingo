@@ -13,8 +13,6 @@ var contextPath = "<c:out value="${ctx}"/>";
 <link href="${ctx}/script/dwz/themes/css/core.css" rel="stylesheet" type="text/css" media="screen"/>
 <link href="${ctx}/script/dwz/themes/css/print.css" rel="stylesheet" type="text/css" media="print"/>
 <link href="${ctx}/script/dwz/uploadify/css/uploadify.css" rel="stylesheet" type="text/css" media="screen"/>
-<link href="${ctx}/script/zTree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" type="text/css" media="screen"/>
-<link href="${ctx}/script/ajaxfileupload/ajaxfileupload.css" type="text/css" rel="stylesheet">
 <!--[if IE]>
 <link href="themes/css/ieHack.css" rel="stylesheet" type="text/css" media="screen"/>
 <![endif]-->
@@ -61,11 +59,9 @@ var contextPath = "<c:out value="${ctx}"/>";
 <script src="${ctx}/script/dwz/js/dwz.combox.js" type="text/javascript"></script>
 <script src="${ctx}/script/dwz/js/dwz.print.js" type="text/javascript"></script>
 <!--
-<script src="bin/dwz.min.js" type="text/javascript"></script>
+<script src="${ctx}/script/dwz/bin/dwz.min.js" type="text/javascript"></script>
 -->
 <script src="${ctx}/script/dwz/js/dwz.regional.zh.js" type="text/javascript"></script>
-
-<script src="${ctx}/script/zTree/js/jquery.ztree.all-3.5.js" type="text/javascript"></script>
 
 <script type="text/javascript" src="${ctx}/script/ajaxfileupload/ajaxfileupload.js"></script>
 

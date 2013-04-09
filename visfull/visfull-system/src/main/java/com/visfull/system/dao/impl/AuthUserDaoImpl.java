@@ -24,4 +24,9 @@ public class AuthUserDaoImpl extends HibernateBaseDaoImpl<AuthUser, Long> implem
         getSession().saveOrUpdate(authUser);
     }
 
+	public void deleteByPK(Long pk) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

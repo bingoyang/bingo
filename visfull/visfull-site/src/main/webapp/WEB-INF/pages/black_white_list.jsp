@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="./pager/include.inc.jsp"%>
-<form id="pagerForm" method="post" action="${ctx }/bz/blackwhitelist">
+<form id="pagerForm" method="post" action="${ctx}/bz/blackwhitelist">
 	<input type="hidden" name="pageNum" value="1" />
 	<input type="hidden" name="numPerPage" value="${page.pageSize}" />
 </form>
@@ -53,7 +53,7 @@
 		</thead>
 		<tbody>
 		<c:forEach var="item" items="${page.data}" varStatus="s">
-			<tr target="slt_objId" rel="${item.id }">
+			<tr target="slt_objId" rel="${item.id}">
 				<td>${s.index + 1}</td>
 				<td>${item.phone}</td>
 				<td>${item.type.displayName}</td>

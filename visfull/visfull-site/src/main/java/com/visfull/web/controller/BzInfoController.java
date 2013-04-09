@@ -24,6 +24,8 @@ import com.visfull.bz.domain.BzServiceprovider;
 import com.visfull.bz.service.BzInfoService;
 import com.visfull.bz.vo.Condition;
 import com.visfull.bz.vo.Pageable;
+import com.visfull.system.domain.SystemDict;
+import com.visfull.system.service.ResourceService;
 import com.visfull.web.vo.AjaxDone;
 
 @Controller
@@ -34,6 +36,8 @@ public class BzInfoController {
 
     @Autowired
     private BzInfoService bzInfoService;
+    @Autowired
+    private ResourceService resourceService;
 
     @RequestMapping("/addblackwhite/{navTabId}")
     public @ResponseBody AjaxDone  addBlackWhite(@PathVariable("navTabId")String navTabId,BzBlackWhite blackWhite ) {
@@ -403,6 +407,47 @@ public class BzInfoController {
     	return "catalog_tree";
     }
     
+    @RequestMapping("/listnodetree")
+    public @ResponseBody List<BzDataTree> listNodeTree(){
+    	List<BzDataTree> result = bzInfoService.findDataTreeAll(null);
+    	return result;
+    }
+    
+    @RequestMapping("/toaddtreenode/{id}")
+    public String toAddTreeNode(@PathVariable("id")Long id,ModelMap map){
+    	map.put("pId", id);
+    	return "tree_node_add";
+    }
+    
+    @RequestMapping("/addtreenode/{navTabId}")
+    public @ResponseBody AjaxDone  addTreeNode(@PathVariable("navTabId")String navTabId,BzDataTree dataTree){
+    	
+    	bzInfoService.addTreeNode(dataTree);
+    	
+        AjaxDone ajaxDone = new AjaxDone();
+        ajaxDone.setStatusCode("200");
+        ajaxDone.setMessage("success!");
+        ajaxDone.setCallbackType("closeCurrent");
+        return ajaxDone;
+    }
+    
+    @RequestMapping("/updatetreenode/{navTabId}")
+    public @ResponseBody AjaxDone  updateTreeNode(@PathVariable("navTabId")String navTabId,BzDataTree dataTree){
+    	
+    	bzInfoService.updateTreeNode(dataTree);
+        AjaxDone ajaxDone = new AjaxDone();
+        ajaxDone.setStatusCode("200");
+        ajaxDone.setMessage("success!");
+        return ajaxDone;
+    }
+    
+    @RequestMapping("/gettreenode/{id}")
+    public String gettreenode(@PathVariable("id")Long id,ModelMap map){
+    	BzDataTree dataTree = bzInfoService.getBzDataTree(id);
+    	map.put("node", dataTree);
+    	return "tree_node_edit";
+    }
+    
     @RequestMapping("/listcatalog/{dataType}")
     public @ResponseBody List<BzDataTree> listCatalog(@PathVariable("dataType") DataType dataType){
     	List<BzDataTree> result = bzInfoService.findDataTreeAll(dataType);
@@ -429,5 +474,69 @@ public class BzInfoController {
     @RequestMapping("/cataloglookup")
     public String catalogLookup(ModelMap map){
     	return "catalog_lookup";
+    }
+    
+    @RequestMapping("/adddict/{navTabId}")
+    public @ResponseBody AjaxDone  addDict(@PathVariable("navTabId")String navTabId,SystemDict systemDict) {
+        try {
+        	resourceService.addSystemDict(systemDict);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        AjaxDone ajaxDone = new AjaxDone();
+        ajaxDone.setStatusCode("200");
+        ajaxDone.setMessage("success!");
+        ajaxDone.setRel(navTabId);
+        ajaxDone.setCallbackType("closeCurrent");
+        return ajaxDone;
+    }
+
+    @RequestMapping("/toadddict")
+    public String toAddDict() {
+        return "add_dict";
+    }
+
+    @RequestMapping("/todictquery")
+    public String toDictQuery(ModelMap map) {
+        return "dict_list";
+    }
+
+    @RequestMapping("/dictlist")
+    public String queryDictList(ModelMap map,com.visfull.system.vo.Pageable<SystemDict> page,com.visfull.system.vo.Condition condition) {
+        
+        page = resourceService.findDictByPage(condition,page.getPageSize(),page.getPageNo());
+        map.put("page", page);
+        return "dict_list";
+    }
+    
+    @RequestMapping("/deletedict/{id}")
+    public @ResponseBody AjaxDone deleteDict(@PathVariable("id")Long id){
+        
+    	resourceService.deleteSystemDict(id);
+    	
+        AjaxDone ajaxDone = new AjaxDone();
+        ajaxDone.setStatusCode("200");
+        ajaxDone.setMessage("success!");
+        return ajaxDone;
+    }
+    
+    @RequestMapping("/toupdatedict/{id}")
+    public String toEditDict(@PathVariable("id")Long id,ModelMap map){
+    	SystemDict systemDict = resourceService.getSystemDict(id);
+    	map.put("dict",systemDict);
+    	return "edit_dict";
+    }
+    
+    @RequestMapping("/updatedict/{navTabId}")
+    public @ResponseBody AjaxDone updateDict(@PathVariable("navTabId")String navTabId,SystemDict systemDict){
+    	
+    	resourceService.updateSystemDict(systemDict);
+    	
+        AjaxDone ajaxDone = new AjaxDone();
+        ajaxDone.setStatusCode("200");
+        ajaxDone.setMessage("success!");
+        ajaxDone.setRel(navTabId);
+        ajaxDone.setCallbackType("closeCurrent");
+        return ajaxDone;
     }
 }

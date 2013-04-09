@@ -2,12 +2,12 @@ package com.visfull.utils;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.CookieStore;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -15,8 +15,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import net.coobird.thumbnailator.Thumbnails;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.Header;
@@ -36,12 +34,15 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.client.protocol.ClientContext;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.params.SyncBasicHttpParams;
+import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
@@ -337,14 +338,13 @@ public class HttpUtil {
 		 String jsonString = "{'serverName': '杨柳冰sssssssss','serverCode': 'dddddddddd','gender': 'MALE','age': 10,'identity': 'ddddddddddd','province': 'dddddddddd','phone': 'ddddddddddd','skillIntroduce': 'dddddddddd','spId': 7,'status': 'NORMAL','posters': [{'id': 1,'owner': 4,'posterUrl': 'http://www.sohu.com','posterDesc': 'good good!','createDate': '2013-01-26 00:31:33'}]}";//"[{'id': 4,'customerPhone': '客户电话号码33333','targetCode': '1111','targetName': '服务人员名称3333333','posters': [{'id': 1,'owner': 4,'posterUrl': 'http://www.sina.com','posterDesc': 'good good!','createDate': '2013-01-26 00:31:33'}]}]";//"{targetType=SERVER, targetId=5, customerServiceInfo=[{'customerCode':'13911014449','customerPhone':'13911014449','serviceDate':'2013-01-25 15:11:11','mIsLoad':true,'iTop':0,'bModified':0,'submit':0,'posters':[{'posterUrl':'http://www.baidu.com','posterDesc':'good good!'}]}], targetName=13911111111}";//"{targetId=5, customerServiceInfo=[{'customerPhone':'13121318129','serviceDate':'2013-01-11 17:57:18'}], targetName='asdasd', targetType=SERVER} ";//"[{'callingNum':'callingnum0','calledNum':'callednum0','callingTime':1358050986328,'callType':'CALLIN'},{'callingNum':'callingnum1','calledNum':'callednum1','callingTime':1358050986328,'callType':'CALLIN'},{'callingNum':'callingnum2','calledNum':'callednum2','callingTime':1358050986328,'callType':'CALLIN'},{'callingNum':'callingnum3','calledNum':'callednum3','callingTime':1358050986328,'callType':'CALLIN'}]";//"{'serverName':'刘德华','serverCode':'dddddddddd','age':10,'identity':'ddddddddddd','province':'dddddddddd','phone':'ddddddddddd','skillIntroduce':'dddddddddd','spId':7,'status':'NORMAL','modifyTime':'2012-12-13 15:47:26','createDate':'2012-12-13 15:47:25'}";//"{'serverCode': '13911111111','pwd': '000000',  'serverName': '  sss       ','gender': 'MALE','age': 10,'identity: '33333333333','province': 'shanxi','phone': '1380000','skillIntroduce': 'dddddddddd','spId': 9,'status': 'NORMAL'}";//"{'id':3,'opName':'ssssssssssd','opHours':'cccccccccc','opPoster':'http:\\\\114.247.94.161:8090\\visfull-site\\posters\\1354963867062.jpg','opHomepage':'sssssssssss','opPhone':'ccccccccccc','opAddress':'cccccccccccc','opMotto':'ssssssssss','opServiceintroduce':'cccccccccccccccccc','status':'NORMAL','initDate':'2012-12-08 00:00:00','joinDate':'2012-12-08 00:00:00','modifyTime':'2012-12-08 18:51:18','createDate':'2012-12-08 18:51:18'}";//"{'id':4,'serverName':'刘德华','serverCode':'dddddddddd','age':10,'identity':'ddddddddddd','province':'dddddddddd','phone':'ddddddddddd','skillIntroduce':'dddddddddd','spId':7,'status':'NORMAL','modifyTime':'2012-12-13 15:47:26','createDate':'2012-12-13 15:47:25'}";
 		// "{'targetId':10,'targetName':'服务人员名称','targetType':'SERVER','customerServiceInfo':[{'customerName':'客户1','customerPhone':'客户电话号码','serviceInfo':'客户服务相关描述','serviceDate':'2012-12-01 21:21:38'},{'customerName':'客户2','customerPhone':'客户电话号码','serviceInfo':'客户服务相关描述','serviceDate':'2012-12-01 21:21:38'},{'customerName':'客户3','customerPhone':'客户电话号码','serviceInfo':'客户服务相关描述','serviceDate':'2012-12-01 21:21:38'}]}";
 		
-//		 CookieStore cookieStore = new BasicCookieStore();
-//		 HttpContext httpContext = new BasicHttpContext();
-//		 httpContext.setAttribute(ClientContext.COOKIE_STORE,cookieStore);
-//		
-//		 nameValuePairs.put("code", "dddddddddd111");
-//		 nameValuePairs.put("password", "123123");
-//		 postByCookie("http://127.0.0.1:8080/visfull-webapp/app/login",
-//		 nameValuePairs,HTTP.UTF_8,httpContext);
+		 BasicCookieStore cookieStore = new BasicCookieStore();
+		 HttpContext httpContext = new BasicHttpContext();
+		 httpContext.setAttribute(ClientContext.COOKIE_STORE,cookieStore);
+		
+		 nameValuePairs.put("code", "dddddddddd111");
+		 nameValuePairs.put("password", "123123");
+		 postByCookie("http://114.247.94.161:8080/visfull-webapp/app/login",nameValuePairs,HTTP.UTF_8,httpContext);
 //		 nameValuePairs.clear();
 		 
 		 

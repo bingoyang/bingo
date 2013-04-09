@@ -24,4 +24,10 @@ public class AuthSessionDaoImpl extends HibernateBaseDaoImpl<AuthSession,String>
 	public void saveOrUpdate(AuthSession d) {
 		getSession().saveOrUpdate(d);
 	}
+
+	public void deleteByPK(String pk) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 }

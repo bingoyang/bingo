@@ -108,6 +108,12 @@ public interface BzInfoService {
 	
 	public void saveCallRecords(List<BzCallRecord> callRecords);
 	
+	public void addTreeNode(BzDataTree dataTree);
+	
+	public void updateTreeNode(BzDataTree dataTree);
+	
+	public BzDataTree getBzDataTree(Long id);
+	
 	public List<BzDataTree> findDataTreeAll(DataType dataType);
 	
 	public List<BzDataTree> findDataTreeAll(DataType dataType,NodeType nodeType);
@@ -135,4 +141,5 @@ public interface BzInfoService {
 	public void deletePosters(List<Long> posterIds);
 	
 	public List<BzPoster> findBzPosters(List<Long> posterIds);
+	
 }

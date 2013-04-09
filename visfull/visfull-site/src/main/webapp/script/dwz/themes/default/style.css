@@ -64,14 +64,14 @@
 .shadow .shadow_f_r { background:url(./images/shadow/shadow_f_r.png) no-repeat;}
 .shadow .shadow_f_c { background:url(./images/shadow/shadow_f_c.png) repeat-x;}
 
-/* Tree 
+/* Tree */
 .tree div div { background:url(./images/tree/tree.png) no-repeat;}
 .tree .folder_collapsable, .tree .folder_expandable, .tree .file { background:url(./images/tree/folder.png) no-repeat;}
 .tree .checked, .tree .unchecked, .tree .indeterminate { background:url(./images/tree/check.png) no-repeat;}
 .tree ul { background:#FFF;}
 .tree li a, .tree li span { color:#183152;}
 .tree .hover { background:#f5f5f5;}
-.tree .selected { background-color:#e8edf3;}*/
+.tree .selected { background-color:#e8edf3;}
 
 /* Accordion */
 .accordion .accordionHeader, .accordion .accordionHeader h2, .accordion .accordionHeader h2 span { color:#183152; background:url(./images/accordion/accordion.png);}

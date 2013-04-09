@@ -22,7 +22,7 @@
 			<tr>
 				<td>消费标准: </td><td><input type="text" name="consumeStandard" class="required" maxlength="20"/></td>
 				<td>归属运营商:</td><td>			<input id="inputOp" name="opId" value="" type="hidden"/>
-			<input class="required" name="opName" type="text"  suggestFields="name"  lookupGroup=""/>
+			<input class="required" name="opName" type="text"  suggestFields="name" readonly lookupGroup=""/>
 			<a class="btnLook" href="${ctx}/bz/initselectoperator" lookupGroup="">查找带回</a>	
 			<span class="info">选择</span></td>
 			</tr>

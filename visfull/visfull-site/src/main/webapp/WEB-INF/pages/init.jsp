@@ -8,50 +8,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=7" />
 <title></title>
 <script type="text/javascript">
-	var setting = {
-			data: {
-				simpleData: {
-					enable: true,
-					idKey:"id",
-					pIdKey:"pId",
-					rootPId:null
-				},
-				key:{
-					name:"nodeName"
-				}
-				
-			},
-			view: {
-				selectedMulti: false
-			},
-			async: {
-				enable: true,
-				url:"${ctx}/menus/init"
-			},
-			callback: {
-				onAsyncSuccess: function(event, treeId, treeNode, msg) {
-					var treeObj = $.fn.zTree.getZTreeObj("tree");
-					treeObj.expandAll(true);
-			        $("a[target=navTab]").each(function(){
-			            $(this).click(function(event){
-			                var $this = $(this);
-			                var title = $this.attr("title") || $this.text();
-			                var tabid = $this.attr("rel") || "_blank";
-			                var fresh = eval($this.attr("fresh") || "true");
-			                var external = eval($this.attr("external") || "false");
-			                var url = unescape($this.attr("href")).replaceTmById($(event.target).parents(".unitBox:first"));
-			                DWZ.debug(url);
-			                if (!url.isFinishedTm()) {
-			                    alertMsg.error($this.attr("warn") || DWZ.msg("alertSelectMsg"));
-			                    return false;
-			                }
-			                navTab.openTab(tabid, url,{title:title, fresh:fresh, external:external});
-			                event.preventDefault();
-			            });
-			        });
-				}
-			}
-		};
+
 
 	$(function() {
 				
@@ -69,14 +26,30 @@
 				orderField : "orderField",
 				orderDirection : "orderDirection"
 			}, //【可选】
-			debug : false, // 调试模式 【true|false】
+			debug : true, // 调试模式 【true|false】
 			callback : function() {
 				initEnv();
 				$("#themeList").theme({
 					themeBase : "${ctx}/script/dwz/themes"
 				}); // themeBase 相对于index页面的主题base路径
-				$.fn.zTree.init($("#tree"), setting);
-
+				$.ajax({
+			        type: "get",
+			        url: "${ctx}/menus/init",
+			        async: false,
+			        dataType: "json",
+			        success: function (data) {
+						$.each(data,function(index,item){
+							if(item.pId == null||item.pId == 0){
+								$("#ul_root").append("<li id='node_"+item.id+"'><a href='"+item.url+"' rel='rel_"+item.id+"' target='navTab'>"+item.nodeName+"</a></li>");
+							}else{
+								
+							}
+						});
+			        },
+			        error: function (XMLHttpRequest, textStatus, errorThrown) {
+			                alert(errorThrown);
+			        }
+				});
 			}
 		});
 	});
@@ -159,11 +132,12 @@
                 <div class="accordion" fillSpace="sidebar">
                     <div class="accordionHeader">
                         <h2>
-                            <span>Folder</span>界面组件
+                            <span>Folder</span>菜单
                         </h2>
                     </div>
                     <div class="accordionContent">
-                        <ul id="tree" class="ztree"></ul>
+						<ul id="ul_root" class="tree treeFolder">
+						</ul>
                     </div>
                 </div>
             </div>

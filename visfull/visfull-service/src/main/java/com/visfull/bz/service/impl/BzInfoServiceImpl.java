@@ -1,6 +1,5 @@
 package com.visfull.bz.service.impl;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -303,6 +302,7 @@ public class BzInfoServiceImpl implements BzInfoService {
 	public void saveCallRecords(List<BzCallRecord> callRecords) {
 
 		for (BzCallRecord bzCallRecord : callRecords) {
+			bzCallRecord.setCallingTime(System.currentTimeMillis()-bzCallRecord.getDuration());
 			bzCallRecord.setCreateDate(new Date());
 			callRecordDao.save(bzCallRecord);
 
@@ -400,6 +400,23 @@ public class BzInfoServiceImpl implements BzInfoService {
 
 	public List<BzPoster> findBzPosters(List<Long> posterIds) {
 		return posterDao.findBzPosters(posterIds);
+	}
+
+	public BzDataTree getBzDataTree(Long id) {
+		return dataTreeDao.findByPK(id);
+	}
+
+	public void addTreeNode(BzDataTree dataTree) {
+		dataTree.setCreateDate(new Date());
+		dataTreeDao.save(dataTree);
+	}
+
+	public void updateTreeNode(BzDataTree dataTree) {
+		BzDataTree bzDataTree = dataTreeDao.findByPK(dataTree.getId());
+		bzDataTree.setNodeType(dataTree.getNodeType());
+		bzDataTree.setDataType(dataTree.getDataType());
+		bzDataTree.setDataName(dataTree.getDataName());
+		dataTreeDao.update(bzDataTree);
 	}
 
 }

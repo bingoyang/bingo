@@ -25,4 +25,9 @@ public class LogUserLoginDaoImpl extends HibernateBaseDaoImpl<LogUserLogin,Long>
 
     }
 
+	public void deleteByPK(Long pk) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

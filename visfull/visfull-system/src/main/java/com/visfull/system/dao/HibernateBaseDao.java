@@ -14,4 +14,6 @@ public interface HibernateBaseDao<D,PK> {
     
     public void saveOrUpdate(D d);
     
+    public void deleteByPK(PK pk);
+    
 }

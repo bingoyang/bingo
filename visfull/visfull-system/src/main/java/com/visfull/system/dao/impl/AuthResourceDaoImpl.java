@@ -43,4 +43,8 @@ public class AuthResourceDaoImpl extends HibernateBaseDaoImpl<AuthResource,Long>
         return query.list();
     }
 
+	public void deleteByPK(Long pk) {
+		
+	}
+    
 }
