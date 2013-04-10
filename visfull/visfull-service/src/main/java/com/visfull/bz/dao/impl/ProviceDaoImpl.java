@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.springframework.stereotype.Repository;
 
 import com.visfull.bz.dao.ProvinceDao;
 import com.visfull.bz.domain.Province;
 
+@Repository
 public class ProviceDaoImpl extends HibernateBaseDaoImpl<Province,Integer> implements
 		ProvinceDao {
 
@@ -40,7 +42,7 @@ public class ProviceDaoImpl extends HibernateBaseDaoImpl<Province,Integer> imple
 		List<Province> result = new ArrayList<Province>();
 		Criteria criteria = getSession().createCriteria(Province.class);
 		criteria.setProjection(null);
-		
+		result = criteria.list();
 		return result;
 	}
 

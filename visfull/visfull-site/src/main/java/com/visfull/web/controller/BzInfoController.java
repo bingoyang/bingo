@@ -2,7 +2,9 @@ package com.visfull.web.controller;
 
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +23,8 @@ import com.visfull.bz.domain.BzDataTree.DataType;
 import com.visfull.bz.domain.BzOperator;
 import com.visfull.bz.domain.BzServer;
 import com.visfull.bz.domain.BzServiceprovider;
+import com.visfull.bz.domain.City;
+import com.visfull.bz.domain.County;
 import com.visfull.bz.service.BzInfoService;
 import com.visfull.bz.vo.Condition;
 import com.visfull.bz.vo.Pageable;
@@ -538,5 +542,29 @@ public class BzInfoController {
         ajaxDone.setRel(navTabId);
         ajaxDone.setCallbackType("closeCurrent");
         return ajaxDone;
+    }
+    
+    @RequestMapping("/citylist/{value}")
+    public @ResponseBody Map<Object,String> queryCityList(@PathVariable("value")Integer provinceId){
+        Map<Object,String> resultMap = new HashMap<Object, String>();
+    	List<City> result = bzInfoService.findCityList(provinceId);
+    	if(result!=null&&!result.isEmpty()){
+    		for (City city : result) {
+				resultMap.put(city.getId(),city.getName());
+			}
+    	}
+        return resultMap;
+    }
+    
+    @RequestMapping("/countylist/{value}")
+    public @ResponseBody Map<Object,String> queryCountyList(@PathVariable("value")Integer cityId){
+        Map<Object,String> resultMap = new HashMap<Object, String>();
+    	List<County> result = bzInfoService.findCountyList(cityId);
+    	if(result!=null&&!result.isEmpty()){
+    		for (County county : result) {
+				resultMap.put(county.getId(),county.getName());
+			}
+    	}
+        return resultMap;
     }
 }

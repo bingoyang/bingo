@@ -31,6 +31,8 @@ public class Condition {
     
     private Long catalogId;
     
+    private String name;
+    
     public String getOpName() {
 		return opName;
 	}
@@ -118,6 +120,12 @@ public class Condition {
 	public void setCatalogId(Long catalogId) {
 		this.catalogId = catalogId;
 	}
-	
-	
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 }

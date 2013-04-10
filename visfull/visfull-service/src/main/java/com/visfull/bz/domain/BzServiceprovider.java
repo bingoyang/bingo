@@ -69,6 +69,10 @@ public class BzServiceprovider implements java.io.Serializable {
 	private Long catalogId;
 	@Expose
 	private String catalogName;
+	@Expose
+	private Integer communityId;
+	@Expose
+	private String communityName;
 
 	public BzServiceprovider() {
 	}
@@ -277,6 +281,22 @@ public class BzServiceprovider implements java.io.Serializable {
 	}
 
 	
+	@Column(name = "community_id")
+	public Integer getCommunityId() {
+		return communityId;
+	}
+
+	public void setCommunityId(Integer communityId) {
+		this.communityId = communityId;
+	}
+	@Column(name = "community_name")
+	public String getCommunityName() {
+		return communityName;
+	}
+
+	public void setCommunityName(String communityName) {
+		this.communityName = communityName;
+	}
 
 	@Column(name = "op_name")
 	public String getOpName() {
@@ -286,9 +306,6 @@ public class BzServiceprovider implements java.io.Serializable {
 	public void setOpName(String opName) {
 		this.opName = opName;
 	}
-
-
-
 
 	public enum SpStatus implements IEnumDisplay {
 		NORMAL("正常"),STOP("停用");

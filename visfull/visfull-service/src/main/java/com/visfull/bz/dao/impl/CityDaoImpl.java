@@ -1,10 +1,16 @@
 package com.visfull.bz.dao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Repository;
 
 import com.visfull.bz.dao.CityDao;
 import com.visfull.bz.domain.City;
 
+@Repository
 public class CityDaoImpl extends HibernateBaseDaoImpl<City,Integer> implements CityDao {
 
 	public void save(City object) {
@@ -33,8 +39,12 @@ public class CityDaoImpl extends HibernateBaseDaoImpl<City,Integer> implements C
 	}
 
 	public List<City> findCitiesByProvinceId(Integer provinceId) {
-		// TODO Auto-generated method stub
-		return null;
+		List<City> result = new ArrayList<City>();
+		Criteria criteria = getSession().createCriteria(City.class);
+		criteria.add(Restrictions.eq("provinceId", provinceId));
+		criteria.setProjection(null);
+		result = criteria.list();
+		return result;
 	}
 
 }

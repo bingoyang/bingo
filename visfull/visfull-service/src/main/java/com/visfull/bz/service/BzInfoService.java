@@ -8,6 +8,9 @@ import com.visfull.bz.domain.BzCallRecord;
 import com.visfull.bz.domain.BzCustomer;
 import com.visfull.bz.domain.BzCustomerBinder;
 import com.visfull.bz.domain.BzDataTree;
+import com.visfull.bz.domain.City;
+import com.visfull.bz.domain.County;
+import com.visfull.bz.domain.Province;
 import com.visfull.bz.domain.BzDataTree.DataType;
 import com.visfull.bz.domain.BzDataTree.NodeType;
 import com.visfull.bz.domain.BzOperator;
@@ -141,5 +144,11 @@ public interface BzInfoService {
 	public void deletePosters(List<Long> posterIds);
 	
 	public List<BzPoster> findBzPosters(List<Long> posterIds);
+	
+	public List<Province> findProvincesAll();
+	
+	public List<City> findCityList(Integer provinceId);
+	
+	public List<County> findCountyList(Integer cityId);
 	
 }

@@ -5,10 +5,9 @@
 <hibernate-configuration>
     <session-factory name="sessionFactory">
         <property name="hibernate.connection.driver_class">org.gjt.mm.mysql.Driver</property>
-        <property name="hibernate.connection.password">123</property>
-        <property name="hibernate.connection.url">jdbc:mysql://127.0.0.1:3306/bingo</property>
+        <property name="hibernate.connection.password">ysten$%^#@!</property>
+        <property name="hibernate.connection.url">jdbc:mysql://114.247.94.162:3306/bing_db</property>
         <property name="hibernate.connection.username">root</property>
-        <property name="hibernate.default_schema">test</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</property>
     </session-factory>
 </hibernate-configuration>

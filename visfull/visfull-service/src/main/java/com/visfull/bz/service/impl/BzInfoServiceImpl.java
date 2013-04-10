@@ -8,11 +8,14 @@ import org.springframework.stereotype.Service;
 
 import com.visfull.bz.dao.BlackWhiteDao;
 import com.visfull.bz.dao.CallRecordDao;
+import com.visfull.bz.dao.CityDao;
+import com.visfull.bz.dao.CountyDao;
 import com.visfull.bz.dao.CustomerBinderDao;
 import com.visfull.bz.dao.CustomerDao;
 import com.visfull.bz.dao.DataTreeDao;
 import com.visfull.bz.dao.OperatorDao;
 import com.visfull.bz.dao.PosterDao;
+import com.visfull.bz.dao.ProvinceDao;
 import com.visfull.bz.dao.ServerDao;
 import com.visfull.bz.dao.ServiceProviderDao;
 import com.visfull.bz.dao.SignInDao;
@@ -28,6 +31,9 @@ import com.visfull.bz.domain.BzPoster;
 import com.visfull.bz.domain.BzServer;
 import com.visfull.bz.domain.BzServiceprovider;
 import com.visfull.bz.domain.BzSignIn;
+import com.visfull.bz.domain.City;
+import com.visfull.bz.domain.County;
+import com.visfull.bz.domain.Province;
 import com.visfull.bz.emnu.TargetType;
 import com.visfull.bz.service.BzInfoService;
 import com.visfull.bz.util.BeanUtils;
@@ -57,6 +63,13 @@ public class BzInfoServiceImpl implements BzInfoService {
 	private DataTreeDao dataTreeDao;
 	@Autowired
 	private PosterDao posterDao;
+	@Autowired
+	private ProvinceDao provinceDao;
+	@Autowired
+	private CityDao cityDao;
+	@Autowired
+	private CountyDao countyDao;
+	
 
 
 	public void addOperator(BzOperator operator) {
@@ -417,6 +430,18 @@ public class BzInfoServiceImpl implements BzInfoService {
 		bzDataTree.setDataType(dataTree.getDataType());
 		bzDataTree.setDataName(dataTree.getDataName());
 		dataTreeDao.update(bzDataTree);
+	}
+
+	public List<Province> findProvincesAll() {
+		return provinceDao.findALlProvinces();
+	}
+
+	public List<City> findCityList(Integer provinceId) {
+		return cityDao.findCitiesByProvinceId(provinceId);
+	}
+
+	public List<County> findCountyList(Integer cityId) {
+		return countyDao.findCountiesByCityId(cityId);
 	}
 
 }
