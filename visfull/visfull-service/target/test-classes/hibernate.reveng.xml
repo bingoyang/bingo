@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd" >
+
+<hibernate-reverse-engineering>
+  <table-filter match-catalog="bingo" match-name="bz_black_white"/>
+  <table-filter match-catalog="bingo" match-name="bz_cusomer_binder"/>
+  <table-filter match-catalog="bingo" match-name="bz_customer"/>
+  <table-filter match-catalog="bingo" match-name="bz_customer_history"/>
+  <table-filter match-catalog="bingo" match-name="bz_operator"/>
+  <table-filter match-catalog="bingo" match-name="bz_server"/>
+  <table-filter match-catalog="bingo" match-name="bz_serviceprovider"/>
+  <table-filter match-catalog="bingo" match-name="bz_sign_in"/>
+</hibernate-reverse-engineering>
