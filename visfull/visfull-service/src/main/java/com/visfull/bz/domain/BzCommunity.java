@@ -1,10 +1,13 @@
 package com.visfull.bz.domain;
 
+import static javax.persistence.GenerationType.IDENTITY;
+
 import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -30,6 +33,8 @@ public class BzCommunity implements Serializable {
 	private Integer areaId;
 	@Expose
 	private Date createDate;
+	@Expose
+	private String areaName;
 	
 	public BzCommunity() {
 		super();
@@ -45,6 +50,7 @@ public class BzCommunity implements Serializable {
 	}
 	
 	@Id
+	@GeneratedValue(strategy = IDENTITY)
 	@Column(name = "id", unique = true, nullable = false)
 	public Integer getId() {
 		return id;
@@ -83,5 +89,12 @@ public class BzCommunity implements Serializable {
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}
-
+	
+	@Column(name = "area_name", nullable = false)
+	public String getAreaName() {
+		return areaName;
+	}
+	public void setAreaName(String areaName) {
+		this.areaName = areaName;
+	}
 }

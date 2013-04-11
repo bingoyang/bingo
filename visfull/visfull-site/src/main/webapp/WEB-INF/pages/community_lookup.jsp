@@ -1,10 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="./pager/include.inc.jsp"%>
-<form id="pagerForm" method="post" action="${ctx}/bz/arealist">
+<form id="pagerForm" method="post" action="${ctx}/bz/selectcommunitylist">
 	<input type="hidden" name="pageNum" value="1" />
 	<input type="hidden" name="numPerPage" value="${page.pageSize}" />
 </form>
-<form method="post" rel="pagerForm" action="${ctx}/bz/arealist" onsubmit="return navTabSearch(this)">
+<form method="post" rel="pagerForm" action="${ctx}/bz/selectcommunitylist" onsubmit="return dialogSearch(this,'dialog')">
 <div class="pageHeader">
 	<div class="searchBar">
 		<table>
@@ -15,10 +15,9 @@
 			<td>结束日期：</td>
 			<td><input type="text" name="endDate" class="date" value="${param.endDate}" readonly="true"/>
 				<a class="inputDateButton" href="javascript:;">选择</a></td>
-							<td>商圈名称：</td>
+							<td>小区名称：</td>
 							<td>
-				<input type="text" name="name" class="textInput" value="${param.name}" size="30" /></td>
-	
+				<input type="text" name="opName" class="textInput" value="${param.name}" size="30" /></td>
 				<td><div class="buttonActive"><div class="buttonContent"><button type="submit">查询</button></div></div></td>
 			</tr>
 		</table>
@@ -27,32 +26,26 @@
 </form>
 
 <div class="pageContent">
-	<div class="panelBar">
-		<ul class="toolBar">
-			<li><a class="add" target="dialog" rel="areaDialog" href="${ctx}/bz/toaddarea" width="400" height="200" title="添加"><span>添加</span></a></li>
-			<li><a class="edit" target="dialog" rel="editDialog" href="${ctx}/bz/toupdatearea/{slt_objId}" title="编辑"><span>编辑</span></a></li>
-			<li><a class="delete" target="ajaxTodo" href="${ctx}/bz/deletearea/{slt_objId}" title="你确定要删除吗?"><span>删除</span></a></li>
-			<li class="line">line</li>
-		</ul>
-	</div>
 	<table class="table" width="100%" layoutH="113">
 		<thead>
 			<tr>
 				<th width="50">序号</th>
-				<th>商圈编码</th>
-				<th>商圈名称</th>
-				<th>商圈归属区域</th>
+				<th>小区编码</th>
+				<th>小区名称</th>
+				<th>归属商圈</th>
 				<th>创建时间</th>
+				<th>带回</th>
 			</tr>
 		</thead>
 		<tbody>
 		<c:forEach var="item" items="${page.data}" varStatus="s">
 			<tr target="slt_objId" rel="${item.id}">
 				<td>${item.id}</td>
-				<td>${item.areaCode}</td>
+				<td>${item.communityCode}</td>
+				<td>${item.communityName}</td>
 				<td>${item.areaName}</td>
-				<td>${item.countyName}</td>
 				<td><fmt:formatDate value="${item.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
+				<td><a class="btnSelect" href="javascript:$.bringBack({communityId:${item.id},communityName:'${item.communityName}'})" title="查找带回">选择</a></td>
 			</tr>
 		</c:forEach>
 		</tbody>

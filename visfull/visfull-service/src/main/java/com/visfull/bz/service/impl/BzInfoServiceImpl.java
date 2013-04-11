@@ -6,9 +6,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.visfull.bz.dao.AreaDao;
 import com.visfull.bz.dao.BlackWhiteDao;
 import com.visfull.bz.dao.CallRecordDao;
 import com.visfull.bz.dao.CityDao;
+import com.visfull.bz.dao.CommunityDao;
 import com.visfull.bz.dao.CountyDao;
 import com.visfull.bz.dao.CustomerBinderDao;
 import com.visfull.bz.dao.CustomerDao;
@@ -19,8 +21,10 @@ import com.visfull.bz.dao.ProvinceDao;
 import com.visfull.bz.dao.ServerDao;
 import com.visfull.bz.dao.ServiceProviderDao;
 import com.visfull.bz.dao.SignInDao;
+import com.visfull.bz.domain.BzArea;
 import com.visfull.bz.domain.BzBlackWhite;
 import com.visfull.bz.domain.BzCallRecord;
+import com.visfull.bz.domain.BzCommunity;
 import com.visfull.bz.domain.BzCustomer;
 import com.visfull.bz.domain.BzCustomerBinder;
 import com.visfull.bz.domain.BzDataTree;
@@ -69,6 +73,10 @@ public class BzInfoServiceImpl implements BzInfoService {
 	private CityDao cityDao;
 	@Autowired
 	private CountyDao countyDao;
+	@Autowired
+	private AreaDao areaDao;
+	@Autowired
+	private CommunityDao communityDao;
 	
 
 
@@ -442,6 +450,58 @@ public class BzInfoServiceImpl implements BzInfoService {
 
 	public List<County> findCountyList(Integer cityId) {
 		return countyDao.findCountiesByCityId(cityId);
+	}
+
+	public void addArea(BzArea area) {
+		areaDao.save(area);
+	}
+
+	public void deleteArea(Integer id) {
+		areaDao.deleteByPK(id);
+	}
+
+	public void updateArea(BzArea area) {
+		BzArea area2 = areaDao.findByPK(area.getId());
+		try {
+			BeanUtils.copyProperties(area2, area);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public Pageable<BzArea> findAreaPageable(Condition condition,
+			Pageable<BzArea> page) {
+		int pageSize = page.getPageSize();
+		int pageNo = page.getPageNo(); 
+		return areaDao.findAreaByPage(condition, pageSize, pageNo);
+	}
+
+	public void addCommunity(BzCommunity community) {
+		communityDao.save(community);
+	}
+
+	public void deleteCommunity(Integer id) {
+		communityDao.deleteByPK(id);
+	}
+
+	public void updateCommunity(BzCommunity community) {
+		BzCommunity d = communityDao.findByPK(community.getId());
+		try {
+			BeanUtils.copyProperties(d, community);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public Pageable<BzCommunity> findCommunityPageable(Condition condition,
+			Pageable<BzCommunity> page) {
+		int pageSize = page.getPageSize();
+		int pageNo = page.getPageNo(); 
+		return communityDao.findCommunityByPage(condition, pageSize, pageNo);
+	}
+
+	public List<BzArea> findAreasAll() {
+		return areaDao.findAreaAll();
 	}
 
 }

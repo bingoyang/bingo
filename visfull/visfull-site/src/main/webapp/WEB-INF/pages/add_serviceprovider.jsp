@@ -50,11 +50,15 @@
 				</tr>
 			<tr>
 					<td>归属分类:</td>
-					<td colspan="3">
+					<td colspan="">
 						<input name="catalogId" value="" type="hidden"/>
 						<input class="required" name="catalogName" type="text" readonly/>
 						<a class="btnLook" href="${ctx}/bz/cataloglookup" lookupGroup="">查找带回</a>	
 					</td>
+					<td>归属小区:</td><td><input id="inputCommunity" name="communityId" value="" type="hidden"/>
+				<input class="required" name="communityName" type="text"  suggestFields="name" readonly lookupGroup=""/>
+				<a class="btnLook" href="${ctx}/bz/initselectcommunity" lookupGroup="">查找带回</a>	
+				<span class="info">选择</span></td>
 			</tr>
 			<tr>
 					<td>服务提供商介绍:</td>

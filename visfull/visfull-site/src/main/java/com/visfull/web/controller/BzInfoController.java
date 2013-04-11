@@ -1,10 +1,9 @@
 package com.visfull.web.controller;
 
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +14,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.visfull.bz.domain.BzArea;
 import com.visfull.bz.domain.BzBlackWhite;
+import com.visfull.bz.domain.BzCommunity;
 import com.visfull.bz.domain.BzCustomer;
 import com.visfull.bz.domain.BzCustomerBinder;
 import com.visfull.bz.domain.BzDataTree;
@@ -25,6 +26,7 @@ import com.visfull.bz.domain.BzServer;
 import com.visfull.bz.domain.BzServiceprovider;
 import com.visfull.bz.domain.City;
 import com.visfull.bz.domain.County;
+import com.visfull.bz.domain.Province;
 import com.visfull.bz.service.BzInfoService;
 import com.visfull.bz.vo.Condition;
 import com.visfull.bz.vo.Pageable;
@@ -545,26 +547,182 @@ public class BzInfoController {
     }
     
     @RequestMapping("/citylist/{value}")
-    public @ResponseBody Map<Object,String> queryCityList(@PathVariable("value")Integer provinceId){
-        Map<Object,String> resultMap = new HashMap<Object, String>();
+    public @ResponseBody List<List<Object>> queryCityList(@PathVariable("value")Integer provinceId){
+    	List<List<Object>> resultList = new ArrayList<List<Object>>();
     	List<City> result = bzInfoService.findCityList(provinceId);
     	if(result!=null&&!result.isEmpty()){
+    		List<Object> d = null;
     		for (City city : result) {
-				resultMap.put(city.getId(),city.getName());
+    			d = new ArrayList<Object>();
+    			d.add(city.getId());
+    			d.add(city.getName());
+    			resultList.add(d);
 			}
+    		
     	}
-        return resultMap;
+        return resultList;
     }
     
     @RequestMapping("/countylist/{value}")
-    public @ResponseBody Map<Object,String> queryCountyList(@PathVariable("value")Integer cityId){
-        Map<Object,String> resultMap = new HashMap<Object, String>();
+    public @ResponseBody List<List<Object>> queryCountyList(@PathVariable("value")Integer cityId){
+    	List<List<Object>> resultList = new ArrayList<List<Object>>();
     	List<County> result = bzInfoService.findCountyList(cityId);
     	if(result!=null&&!result.isEmpty()){
+    		List<Object> d = null;
     		for (County county : result) {
-				resultMap.put(county.getId(),county.getName());
+    			d = new ArrayList<Object>();
+    			d.add(county.getId());
+    			d.add(county.getName());
+    			resultList.add(d);
 			}
+    		
     	}
-        return resultMap;
+        return resultList;
+    }
+    
+    @RequestMapping("/addcommunity/{navTabId}")
+    public @ResponseBody AjaxDone  addCommunity(@PathVariable("navTabId")String navTabId,BzCommunity community) {
+    	community.setCreateDate(new Date());
+        try {
+        	bzInfoService.addCommunity(community);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        AjaxDone ajaxDone = new AjaxDone();
+        ajaxDone.setStatusCode("200");
+        ajaxDone.setMessage("success!");
+        ajaxDone.setRel(navTabId);
+        ajaxDone.setCallbackType("closeCurrent");
+        return ajaxDone;
+    }
+
+    @RequestMapping("/toaddcommunity")
+    public String toAddCommunity(ModelMap map) {
+    	List<BzArea> areas = bzInfoService.findAreasAll();
+    	map.put("areas",areas);
+        return "add_community";
+    }
+
+    @RequestMapping("/tocommunityquery")
+    public String toCommunityQuery(ModelMap map) {
+        
+        return "community_list";
+    }
+    
+    @RequestMapping("/initselectcommunity")
+    public String initSelectCommunity(ModelMap map) {
+        return "community_lookup";
+    }
+
+    @RequestMapping("/communitylist")
+    public String queryCommunityList(ModelMap map,Pageable<BzCommunity> page,Condition condition) {
+        
+        page = bzInfoService.findCommunityPageable(condition, page);
+        map.put("page", page);
+        return "community_list";
+    }
+    
+    @RequestMapping("/selectcommunitylist")
+    public String querySelectCommunityList(ModelMap map,Pageable<BzCommunity> page,Condition condition) {
+        
+        page = bzInfoService.findCommunityPageable(condition, page);
+        map.put("page", page);
+        return "community_lookup";
+    }
+    
+    @RequestMapping("/deletecommunity/{id}")
+    public @ResponseBody AjaxDone deleteCommunity(@PathVariable("id")Integer id){
+    	
+    	bzInfoService.deleteCommunity(id);
+        
+        AjaxDone ajaxDone = new AjaxDone();
+        ajaxDone.setStatusCode("200");
+        ajaxDone.setMessage("success!");
+        return ajaxDone;
+    }
+    
+    @RequestMapping("/toupdatecommunity/{id}")
+    public String toEditCommunity(@PathVariable("id")Long id,ModelMap map){
+    	return "edit_community";
+    }
+    
+    @RequestMapping("/updatecommunity/{navTabId}")
+    public @ResponseBody AjaxDone updateCommunity(@PathVariable("navTabId")String navTabId,BzCommunity community){
+    	
+    	bzInfoService.updateCommunity(community);
+    	
+        AjaxDone ajaxDone = new AjaxDone();
+        ajaxDone.setStatusCode("200");
+        ajaxDone.setMessage("success!");
+        ajaxDone.setRel(navTabId);
+        ajaxDone.setCallbackType("closeCurrent");
+        return ajaxDone;
+    }
+    
+    @RequestMapping("/addarea/{navTabId}")
+    public @ResponseBody AjaxDone  addArea(@PathVariable("navTabId")String navTabId,BzArea area) {
+        area.setCreateDate(new Date());
+        try {
+        	bzInfoService.addArea(area);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        AjaxDone ajaxDone = new AjaxDone();
+        ajaxDone.setStatusCode("200");
+        ajaxDone.setMessage("success!");
+        ajaxDone.setRel(navTabId);
+        ajaxDone.setCallbackType("closeCurrent");
+        return ajaxDone;
+    }
+
+    @RequestMapping("/toaddarea")
+    public String toAddArea(ModelMap map) {
+    	List<Province> provinces = bzInfoService.findProvincesAll();
+    	map.put("provinces",provinces);
+        return "add_area";
+    }
+
+    @RequestMapping("/toareaquery")
+    public String toAreaQuery(ModelMap map) {
+        
+        return "area_list";
+    }
+
+    @RequestMapping("/arealist")
+    public String queryAreaList(ModelMap map,Pageable<BzArea> page,Condition condition) {
+        
+        page = bzInfoService.findAreaPageable(condition, page);
+        map.put("page", page);
+        return "area_list";
+    }
+    
+    @RequestMapping("/deletearea/{id}")
+    public @ResponseBody AjaxDone deleteArea(@PathVariable("id")Integer id){
+    	
+    	bzInfoService.deleteArea(id);
+        
+        AjaxDone ajaxDone = new AjaxDone();
+        ajaxDone.setStatusCode("200");
+        ajaxDone.setMessage("success!");
+        return ajaxDone;
+    }
+    
+    @RequestMapping("/toupdatearea/{id}")
+    public String toEditArea(@PathVariable("id")Long id,ModelMap map){
+    	
+    	return "edit_area";
+    }
+    
+    @RequestMapping("/updatearea/{navTabId}")
+    public @ResponseBody AjaxDone updateArea(@PathVariable("navTabId")String navTabId,BzArea area){
+    	
+    	bzInfoService.updateArea(area);
+    	
+        AjaxDone ajaxDone = new AjaxDone();
+        ajaxDone.setStatusCode("200");
+        ajaxDone.setMessage("success!");
+        ajaxDone.setRel(navTabId);
+        ajaxDone.setCallbackType("closeCurrent");
+        return ajaxDone;
     }
 }

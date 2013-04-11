@@ -3,8 +3,10 @@ package com.visfull.bz.service;
 import java.util.Date;
 import java.util.List;
 
+import com.visfull.bz.domain.BzArea;
 import com.visfull.bz.domain.BzBlackWhite;
 import com.visfull.bz.domain.BzCallRecord;
+import com.visfull.bz.domain.BzCommunity;
 import com.visfull.bz.domain.BzCustomer;
 import com.visfull.bz.domain.BzCustomerBinder;
 import com.visfull.bz.domain.BzDataTree;
@@ -150,5 +152,23 @@ public interface BzInfoService {
 	public List<City> findCityList(Integer provinceId);
 	
 	public List<County> findCountyList(Integer cityId);
+	
+	public List<BzArea> findAreasAll();
+	
+	public void addArea(BzArea area);
+	
+	public void deleteArea(Integer id);
+	
+	public void updateArea(BzArea area);
+	
+	public Pageable<BzArea> findAreaPageable(Condition condition,Pageable<BzArea> page);
+	
+	public void addCommunity(BzCommunity community);
+	
+	public void deleteCommunity(Integer id);
+	
+	public void updateCommunity(BzCommunity community);
+	
+	public Pageable<BzCommunity> findCommunityPageable(Condition condition,Pageable<BzCommunity> page);
 	
 }
