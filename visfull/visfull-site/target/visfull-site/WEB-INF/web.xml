@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+ <display-name>BINGO Web Application</display-name>
+ <!-- Spring配置文件位置 -->
+ <context-param>
+  <param-name>contextConfigLocation</param-name>
+  <param-value>classpath:spring/*.xml</param-value>
+ </context-param>
+ <!-- Filter 定义 编码过滤器，用于避免乱码问题 -->
+ <filter>
+  <filter-name>encodingFilter</filter-name>
+  <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+  <init-param>
+   <param-name>encoding</param-name>
+   <param-value>UTF-8</param-value>
+  </init-param>
+  <init-param>
+   <param-name>forceEncoding</param-name>
+   <param-value>true</param-value>
+  </init-param>
+ </filter>
+ <filter>
+  <filter-name>sessionView</filter-name>
+  <filter-class>org.springframework.orm.hibernate4.support.OpenSessionInViewFilter</filter-class>
+ </filter> 
+ <filter-mapping>
+  <filter-name>encodingFilter</filter-name>
+  <url-pattern>/*</url-pattern>
+ </filter-mapping>
+ <filter-mapping>
+  <filter-name>sessionView</filter-name>
+  <url-pattern>/*</url-pattern>
+ </filter-mapping>
+ <listener>
+  <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+ </listener>
+ <servlet>
+  <servlet-name>bingo</servlet-name>
+  <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+  <init-param>
+   <param-name>contextConfigLocation</param-name>
+   <param-value>classpath:spring/bingo-servlet.xml</param-value>
+  </init-param>
+  <load-on-startup>1</load-on-startup>
+ </servlet>
+ <servlet-mapping>
+  <servlet-name>bingo</servlet-name>
+  <url-pattern>/</url-pattern>
+ </servlet-mapping>
+ <session-config>
+  <session-timeout>60</session-timeout>
+ </session-config>
+ <welcome-file-list>
+  <welcome-file>login.jsp</welcome-file>
+ </welcome-file-list>
+</web-app>

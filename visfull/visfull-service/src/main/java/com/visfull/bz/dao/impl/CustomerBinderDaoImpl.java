@@ -98,5 +98,40 @@ public class CustomerBinderDaoImpl extends HibernateBaseDaoImpl<BzCustomerBinder
 		
 		return data;
 	}
+
+	public List<BzCustomerBinder> findcuBinders(List<String> targetCodes,
+			TargetType targetType, Date startDate, Date endDate) {
+		
+        Criteria criteria =getSession().createCriteria(BzCustomerBinder.class);
+        if(targetCodes!=null&&!targetCodes.isEmpty()){
+            criteria.add(Restrictions.in("targetCode", targetCodes));
+        }else {
+        	criteria.add(Restrictions.eq("1", 2));
+		}
+        if(targetType!=null){
+        	criteria.add(Restrictions.eq("targetType", targetType));
+        }
+        if(startDate!=null&&endDate!=null){
+            criteria.add(Restrictions.between("createDate",startDate,endDate));
+        }
+        criteria.setProjection(null);
+        List<BzCustomerBinder> data = criteria.list();
+		
+		return data;
+	}
+
+	public BzCustomerBinder findCustomerBinder(String targetCode,
+			String customerPhone) {
+		Criteria criteria =getSession().createCriteria(BzCustomerBinder.class);
+        criteria.add(Restrictions.eq("customerPhone", customerPhone));
+        criteria.add(Restrictions.eq("targetCode", targetCode));
+        criteria.setProjection(null);
+        List<BzCustomerBinder> data = criteria.list();
+		if (data!=null&&!data.isEmpty()) {
+			return data.get(0);
+		}else {
+			return null;
+		}
+	}
 	
 }

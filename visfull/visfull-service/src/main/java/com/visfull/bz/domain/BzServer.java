@@ -46,6 +46,10 @@ public class BzServer implements java.io.Serializable {
 	@Expose
 	private String identity;
 	@Expose
+	private String identityImg;
+	@Expose
+	private String headIcon;
+	@Expose
 	private String province;
 	@Expose
 	private String phone;
@@ -210,6 +214,22 @@ public class BzServer implements java.io.Serializable {
 	@Column(name = "server_code")
 	public String getServerCode() {
 		return serverCode;
+	}
+	@Column(name = "identity_img")
+	public String getIdentityImg() {
+		return identityImg;
+	}
+
+	public void setIdentityImg(String identityImg) {
+		this.identityImg = identityImg;
+	}
+	@Column(name = "head_icon")
+	public String getHeadIcon() {
+		return headIcon;
+	}
+
+	public void setHeadIcon(String headIcon) {
+		this.headIcon = headIcon;
 	}
 
 	public void setServerCode(String serverCode) {

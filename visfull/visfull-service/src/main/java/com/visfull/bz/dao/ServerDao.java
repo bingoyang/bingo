@@ -12,4 +12,7 @@ public interface ServerDao extends HibernateBaseDao<BzServer, Long>{
 	public List<BzServer> findBzServers(long spId,long id);
 	
 	public BzServer getBzServerByCode(String serverCode);
+	
+	public List<String> findBzServerCode(List<Long> spList);
+	
 }

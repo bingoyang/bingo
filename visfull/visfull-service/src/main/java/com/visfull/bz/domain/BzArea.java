@@ -4,6 +4,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import com.google.gson.annotations.Expose;
 
@@ -35,6 +37,8 @@ public class BzArea implements Serializable {
 	private String countyName;
 	@Expose
 	private Date createDate;
+	@Expose
+	private List<BzCommunity> communities;
 	
 	public BzArea() {
 		super();
@@ -98,5 +102,11 @@ public class BzArea implements Serializable {
 		this.createDate = createDate;
 	}
 	
-	
+	@Transient
+	public List<BzCommunity> getCommunities() {
+		return communities;
+	}
+	public void setCommunities(List<BzCommunity> communities) {
+		this.communities = communities;
+	}
 }

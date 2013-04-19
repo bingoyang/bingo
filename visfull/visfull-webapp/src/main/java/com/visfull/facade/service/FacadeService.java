@@ -59,4 +59,12 @@ public interface FacadeService {
 	List<BzDataTree> findBzDataTrees(DataType dataType);
 	
 	public void deletePosters(String posterIds);
+	
+	public ResultBean getOperatorJsonResult(Long opId,String opCode);
+	
+	public ResultBean getServiceProviderJsonResult(Long spId,String spCode);
+	
+	public ResultBean getServerJsonResult(Long serverId,String serverCode);
+	
+	public void addPositionInfo(String jsonString);
 }

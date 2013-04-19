@@ -287,9 +287,9 @@ public class AppBzController {
 	public void listServiceProvider(@PathVariable long opId,HttpServletRequest request, HttpServletResponse response){
 		logger.info("get listServiceProvider info by : {}",opId);
 		ResultBean result = new ResultBean();
-		AuthSession session = sessionService.getSession(request.getHeader("sessionid"));
-		boolean validResult = AccessValidators.validAccessUrl(session,"/serviceproviderlist");
-		if(validResult){
+//		AuthSession session = sessionService.getSession(request.getHeader("sessionid"));
+//		boolean validResult = AccessValidators.validAccessUrl(session,"/serviceproviderlist");
+		if(true){
 			try{
 				List<BzServiceprovider> dataProviders = facadeService.findBzServiceproviders(opId);
 				List<Object> dataObjects = new ArrayList<Object>();
@@ -438,6 +438,63 @@ public class AppBzController {
 				facadeService.deletePosters(posterIds);
 				result.setResultCode("0000");
 				result.setMessage("删除海报成功！");
+			} catch (Exception e) {
+				logger.error(ExceptionUtils.getFullStackTrace(e));
+				result.setResultCode("0001");
+				result.setMessage(e.getMessage());
+			}
+		}else {
+			result.setResultCode("0010");
+			result.setMessage("权限不够，禁止访问！");
+		}
+		RenderUtils.renderJson(JsonUtils.toJson(result), response);
+	}
+	@RequestMapping("/getoperator")
+	public void getOperator(Long opId,String opCode,HttpServletRequest request, HttpServletResponse response){
+		ResultBean result = new ResultBean();
+//		AuthSession session = sessionService.getSession(request.getHeader("sessionid"));
+//		boolean validResult = AccessValidators.validAccessUrl(session,"/deleteposter");
+		if(true){
+			try{
+				result = facadeService.getOperatorJsonResult(opId, opCode);
+			} catch (Exception e) {
+				logger.error(ExceptionUtils.getFullStackTrace(e));
+				result.setResultCode("0001");
+				result.setMessage(e.getMessage());
+			}
+		}else {
+			result.setResultCode("0010");
+			result.setMessage("权限不够，禁止访问！");
+		}
+		RenderUtils.renderJson(JsonUtils.toJson(result), response);
+	}
+	@RequestMapping("/getserviceprovider")
+	public void getServiceProvider(Long spId,String spCode,HttpServletRequest request, HttpServletResponse response){
+		ResultBean result = new ResultBean();
+//		AuthSession session = sessionService.getSession(request.getHeader("sessionid"));
+//		boolean validResult = AccessValidators.validAccessUrl(session,"/deleteposter");
+		if(true){
+			try{
+				result = facadeService.getServiceProviderJsonResult(spId, spCode);
+			} catch (Exception e) {
+				logger.error(ExceptionUtils.getFullStackTrace(e));
+				result.setResultCode("0001");
+				result.setMessage(e.getMessage());
+			}
+		}else {
+			result.setResultCode("0010");
+			result.setMessage("权限不够，禁止访问！");
+		}
+		RenderUtils.renderJson(JsonUtils.toJson(result), response);
+	}
+	@RequestMapping("/getserver")
+	public void getServer(Long serverId,String serverCode,HttpServletRequest request, HttpServletResponse response){
+		ResultBean result = new ResultBean();
+//		AuthSession session = sessionService.getSession(request.getHeader("sessionid"));
+//		boolean validResult = AccessValidators.validAccessUrl(session,"/deleteposter");
+		if(true){
+			try{
+				result = facadeService.getServerJsonResult(serverId, serverCode);
 			} catch (Exception e) {
 				logger.error(ExceptionUtils.getFullStackTrace(e));
 				result.setResultCode("0001");

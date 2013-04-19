@@ -17,4 +17,9 @@ public interface CustomerBinderDao extends HibernateBaseDao<BzCustomerBinder,Lon
 	
 	public List<BzCustomerBinder> findcustomerBinders(String phoneNo,
 			Date startDate, Date endDate);
+	
+	public List<BzCustomerBinder> findcuBinders(List<String> targetCodes,
+			TargetType targetType, Date startDate, Date endDate);
+	
+	public BzCustomerBinder findCustomerBinder(String targetCode,String customerPhone);
 }

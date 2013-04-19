@@ -6,13 +6,13 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import com.visfull.bz.dao.ServerDao;
-import com.visfull.bz.domain.BzOperator;
-import com.visfull.bz.domain.BzServer;
 import com.visfull.bz.domain.BzOperator.OpStatus;
+import com.visfull.bz.domain.BzServer;
 import com.visfull.bz.vo.Condition;
 import com.visfull.bz.vo.Pageable;
 
@@ -97,5 +97,17 @@ public class ServerDaoImpl extends HibernateBaseDaoImpl<BzServer, Long> implemen
 		return null;
 	}
 
+	public List<String> findBzServerCode(List<Long> spList) {
+        Criteria criteria =getSession().createCriteria(BzServer.class);
+        if(spList!=null&&!spList.isEmpty()){
+        	criteria.add(Restrictions.in("spId", spList));
+        }else {
+        	criteria.add(Restrictions.eq("id",-1L));
+		}
+        criteria.setProjection(Property.forName("serverCode"));
+        List<String> data = criteria.list();
+        return data;
+	}
 
+	
 }

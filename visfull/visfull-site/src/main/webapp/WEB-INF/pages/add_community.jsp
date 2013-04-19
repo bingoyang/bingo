@@ -8,7 +8,7 @@
 			</tr>
 			<tr>
 				<td>归属商圈: </td><td>
-					<select class="combox" id="combox_area" name="area">
+					<select class="combox" id="combox_area" name="areaId">
       					 <option value="">所有商圈</option>
       					 <c:forEach var="item" items="${areas}" >
       					 	<option value="${item.id}">${item.areaName}</option>

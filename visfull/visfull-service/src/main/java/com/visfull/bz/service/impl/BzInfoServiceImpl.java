@@ -1,5 +1,6 @@
 package com.visfull.bz.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import com.visfull.bz.dao.CustomerBinderDao;
 import com.visfull.bz.dao.CustomerDao;
 import com.visfull.bz.dao.DataTreeDao;
 import com.visfull.bz.dao.OperatorDao;
+import com.visfull.bz.dao.PositionInfoDao;
 import com.visfull.bz.dao.PosterDao;
 import com.visfull.bz.dao.ProvinceDao;
 import com.visfull.bz.dao.ServerDao;
@@ -31,6 +33,7 @@ import com.visfull.bz.domain.BzDataTree;
 import com.visfull.bz.domain.BzDataTree.DataType;
 import com.visfull.bz.domain.BzDataTree.NodeType;
 import com.visfull.bz.domain.BzOperator;
+import com.visfull.bz.domain.BzPositionInfo;
 import com.visfull.bz.domain.BzPoster;
 import com.visfull.bz.domain.BzServer;
 import com.visfull.bz.domain.BzServiceprovider;
@@ -77,6 +80,8 @@ public class BzInfoServiceImpl implements BzInfoService {
 	private AreaDao areaDao;
 	@Autowired
 	private CommunityDao communityDao;
+	@Autowired
+	private PositionInfoDao positionInfoDao;
 	
 
 
@@ -196,8 +201,13 @@ public class BzInfoServiceImpl implements BzInfoService {
 	}
 
 	public List<BzServiceprovider> findServiceproviders(long pId, long spId) {
-
-		return serviceProviderDao.findBzServiceproviders(pId, spId);
+		List<BzServiceprovider> serviceproviders = serviceProviderDao.findBzServiceproviders(pId, spId);
+		if(serviceproviders!=null&&!serviceproviders.isEmpty()){
+			for (BzServiceprovider bzServiceprovider : serviceproviders) {
+				bzServiceprovider.setPosters(posterDao.findBzPosters(bzServiceprovider.getId()));
+			}
+		}
+		return serviceproviders;
 	}
 
 	public List<BzServer> findServers(long spId, long id) {
@@ -243,20 +253,35 @@ public class BzInfoServiceImpl implements BzInfoService {
 	}
 
 	public BzServer getBzServerByCode(String serverCode) {
-		return serverDao.getBzServerByCode(serverCode);
+		BzServer server = serverDao.getBzServerByCode(serverCode);
+		if(server!=null){
+			server.setPosters(posterDao.findBzPosters(server.getId()));
+		}
+		return server;
 	}
 
 	public BzServiceprovider getServiceproviderByCode(String spCode) {
-		return serviceProviderDao.getServiceproviderByCode(spCode);
+		BzServiceprovider serviceprovider = serviceProviderDao.getServiceproviderByCode(spCode);
+		if(serviceprovider!=null){
+			serviceprovider.setPosters(posterDao.findBzPosters(serviceprovider.getId()));
+		}
+		return serviceprovider;
 	}
 
 	public BzServiceprovider getServiceprovider(Long id) {
-		return serviceProviderDao.findByPK(id);
+		BzServiceprovider serviceprovider = serviceProviderDao.findByPK(id);
+		if(serviceprovider!=null){
+			serviceprovider.setPosters(posterDao.findBzPosters(serviceprovider.getId()));
+		}
+		return serviceprovider;
 	}
 
 	public BzServer getBzServer(Long id) {
-
-		return serverDao.findByPK(id);
+		BzServer server = serverDao.findByPK(id);
+		if(server!=null){
+			server.setPosters(posterDao.findBzPosters(server.getId()));
+		}
+		return server;
 	}
 
 	public Pageable<BzCustomer> findCustomerByCondition(Condition condition,
@@ -369,13 +394,38 @@ public class BzInfoServiceImpl implements BzInfoService {
 
 	public List<BzCustomerBinder> findCustomerBinders(String targetCode,
 			TargetType targetType, Date startDate, Date endDate) {
-		List<BzCustomerBinder> data = customerBinderDao.findcuBinders(targetCode, targetType, startDate, endDate);
+		List<String> targetCodes = new ArrayList<String>();
+
+		BzOperator bzOperator = getOperatorByCode(targetCode);
+		List<BzServiceprovider> serviceproviders = new ArrayList<BzServiceprovider>();
+		if (bzOperator != null) {
+			serviceproviders = serviceProviderDao.findBzServiceproviders(bzOperator.getId(), 0L);
+		}
+		BzServiceprovider bzServiceprovider = getServiceproviderByCode(targetCode);
+		if (serviceproviders!=null&&!serviceproviders.isEmpty()) {
+				if (bzServiceprovider != null) {	
+				serviceproviders.add(bzServiceprovider);
+				}
+		}else {
+				serviceproviders = new ArrayList<BzServiceprovider>();
+				if (bzServiceprovider != null) {	
+					serviceproviders.add(bzServiceprovider);
+				}
+		}
+		List<Long> spList = new ArrayList<Long>();
+		for (BzServiceprovider serviceprovider : serviceproviders) {
+			spList.add(serviceprovider.getId());
+			targetCodes.add(serviceprovider.getServiceCode());
+		}
+		targetCodes = serverDao.findBzServerCode(spList);
+		targetCodes.add(targetCode);
+		List<BzCustomerBinder> data = customerBinderDao.findcuBinders(targetCodes, targetType, startDate, endDate);
 		if(data!=null&&!data.isEmpty()){
 			for (BzCustomerBinder bzCustomerBinder : data) {
 				bzCustomerBinder.setPosters(posterDao.findBzPosters(bzCustomerBinder.getId()));
 			}
 		}
-		return customerBinderDao.findcuBinders(targetCode, targetType, startDate, endDate);
+		return data;
 	}
 
 	public List<BzCustomerBinder> findCustomerBindersCustomer(String phoneNo,
@@ -504,4 +554,26 @@ public class BzInfoServiceImpl implements BzInfoService {
 		return areaDao.findAreaAll();
 	}
 
+	public BzCustomerBinder findCustomerBinder(String targetCode,
+			String customerPhone) {
+		return customerBinderDao.findCustomerBinder(targetCode, customerPhone);
+	}
+
+	public List<BzArea> findAreaList(Integer countyId) {
+		List<BzArea> areas = areaDao.findAreaList(countyId);
+		if (areas !=null ) {
+			for (BzArea bzArea : areas) {
+				bzArea.setCommunities(communityDao.findCommunities(bzArea.getId()));
+			}
+		}
+		return areas;
+	}
+
+	public List<BzCommunity> findCommunities(Integer areaId) {
+		return communityDao.findCommunities(areaId);
+	}
+
+	public void addPositionInfo(BzPositionInfo positionInfo) {
+		positionInfoDao.save(positionInfo);
+	}
 }

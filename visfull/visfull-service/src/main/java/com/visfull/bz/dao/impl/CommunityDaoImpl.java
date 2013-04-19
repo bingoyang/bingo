@@ -57,4 +57,13 @@ public class CommunityDaoImpl extends HibernateBaseDaoImpl<BzCommunity,Integer> 
         return page;
 	}
 
+	public List<BzCommunity> findCommunities(Integer areaId) {
+        Pageable<BzCommunity> page = new Pageable<BzCommunity>();
+        Criteria criteria =getSession().createCriteria(BzCommunity.class);
+        criteria.add(Restrictions.eq("areaId",areaId));
+        criteria.setProjection(null);
+        List<BzCommunity> data = criteria.list();
+        return data;
+	}
+
 }

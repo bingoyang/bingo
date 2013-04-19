@@ -5,6 +5,8 @@ package com.visfull.bz.domain;
 import static javax.persistence.GenerationType.IDENTITY;
 
 import java.util.Date;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -14,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -37,6 +40,10 @@ public class BzServiceprovider implements java.io.Serializable {
 	private String servicePwd;
 	@Expose
 	private String linkMan;
+	@Expose
+	private String linkAddress;
+	@Expose
+	private String authFlag;
 	@Expose
 	private String poster;
 	@Expose
@@ -70,9 +77,9 @@ public class BzServiceprovider implements java.io.Serializable {
 	@Expose
 	private String catalogName;
 	@Expose
-	private Integer communityId;
+	private String serviceArea;
 	@Expose
-	private String communityName;
+	private List<BzPoster> posters; 
 
 	public BzServiceprovider() {
 	}
@@ -280,22 +287,13 @@ public class BzServiceprovider implements java.io.Serializable {
 		this.catalogName = catalogName;
 	}
 
-	
-	@Column(name = "community_id")
-	public Integer getCommunityId() {
-		return communityId;
+	@Column(name = "service_area")
+	public String getServiceArea() {
+		return serviceArea;
 	}
 
-	public void setCommunityId(Integer communityId) {
-		this.communityId = communityId;
-	}
-	@Column(name = "community_name")
-	public String getCommunityName() {
-		return communityName;
-	}
-
-	public void setCommunityName(String communityName) {
-		this.communityName = communityName;
+	public void setServiceArea(String serviceArea) {
+		this.serviceArea = serviceArea;
 	}
 
 	@Column(name = "op_name")
@@ -305,6 +303,33 @@ public class BzServiceprovider implements java.io.Serializable {
 
 	public void setOpName(String opName) {
 		this.opName = opName;
+	}
+
+	@Transient
+	public List<BzPoster> getPosters() {
+		return posters;
+	}
+
+	public void setPosters(List<BzPoster> posters) {
+		this.posters = posters;
+	}
+	
+	
+	@Column(name = "link_address")
+	public String getLinkAddress() {
+		return linkAddress;
+	}
+
+	public void setLinkAddress(String linkAddress) {
+		this.linkAddress = linkAddress;
+	}
+	@Column(name = "auth_flag")
+	public String getAuthFlag() {
+		return authFlag;
+	}
+
+	public void setAuthFlag(String authFlag) {
+		this.authFlag = authFlag;
 	}
 
 	public enum SpStatus implements IEnumDisplay {

@@ -1,6 +1,5 @@
 package com.visufll.facade.conroller;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.visfull.bz.domain.BzArea;
+import com.visfull.bz.domain.BzCommunity;
 import com.visfull.bz.domain.BzServer;
 import com.visfull.bz.domain.BzServiceprovider;
 import com.visfull.bz.domain.BzSignIn;
@@ -31,11 +32,8 @@ import com.visfull.utils.AccessValidators;
 import com.visfull.utils.JsonResult;
 import com.visfull.utils.JsonUtils;
 import com.visfull.utils.RenderUtils;
-import com.visfull.vo.AreaInfo;
 import com.visfull.vo.Operator;
 import com.visfull.vo.ResultBean;
-import com.visfull.vo.Server;
-import com.visfull.vo.ServiceProvider;
 
 @Controller
 public class ServiceInfoController {
@@ -129,7 +127,20 @@ public class ServiceInfoController {
 	public void addPositionInfo(@RequestParam String jsonString,HttpServletRequest request, HttpServletResponse response){
 		logger.info("add position info : {}",jsonString);
 		
-		JsonResult jsonResult = new JsonResult("0000","位置信息提交成功！");
+//		AuthSession session = sessionService.getSession(request.getHeader("sessionid"));
+//		boolean validResult = AccessValidators.validAccessUrl(session,"/uploadservicerecord");
+		JsonResult jsonResult = null;
+		if(true){
+			try{
+				facadeService.addPositionInfo(jsonString);
+				jsonResult = new JsonResult("0000","位置信息添加成功");
+			} catch (Exception e) {
+				logger.error(ExceptionUtils.getFullStackTrace(e));
+				jsonResult = new JsonResult("0001",e.getMessage());
+			}
+		}else {
+			jsonResult = new JsonResult("0010","权限不够，禁止访问！");
+		}
 		RenderUtils.renderJson(JsonUtils.toJson(jsonResult), response);
 	}
 	
@@ -244,5 +255,15 @@ public class ServiceInfoController {
 				
 		RenderUtils.renderJson(JsonUtils.toJson(result), response);
 	}
-		
+	
+	@RequestMapping("/listarea/{countyId}")
+	public void queryAreaList(@PathVariable Integer countyId,HttpServletRequest request, HttpServletResponse response){
+		List<BzArea> result = bzInfoService.findAreaList(countyId);
+		RenderUtils.renderJson(JsonUtils.toJson(result), response);
+	}
+	@RequestMapping("/listcommunity/{areaId}")
+	public void queryCommunityList(@PathVariable Integer areaId,HttpServletRequest request, HttpServletResponse response){
+		List<BzCommunity> result = bzInfoService.findCommunities(areaId);
+		RenderUtils.renderJson(JsonUtils.toJson(result), response);
+	}
 }

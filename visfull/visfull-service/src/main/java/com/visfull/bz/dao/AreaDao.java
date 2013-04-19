@@ -11,4 +11,6 @@ public interface AreaDao extends HibernateBaseDao<BzArea,Integer> {
 	public Pageable<BzArea> findAreaByPage(Condition condition,Integer pageSize,Integer pageNo);
 	
 	public List<BzArea> findAreaAll();
+	
+	public List<BzArea> findAreaList(Integer countyId);
 }

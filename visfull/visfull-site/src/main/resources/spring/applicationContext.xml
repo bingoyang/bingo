@@ -112,8 +112,40 @@
             expression="execution(* com.visfull..service.impl.*.*(..))" />
         <aop:advisor advice-ref="txAdvice" pointcut-ref="interceptorPointCuts" />
     </aop:config> 
+    
+    
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="realm" ref="dbRealm"/>
+    </bean>
+    <bean id="dbRealm" class="com.visfull.shiro.realm.DBRealm">
+    </bean>
+
+    <!-- bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+
+    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
+          depends-on="lifecycleBeanPostProcessor"/>
+    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <property name="securityManager" ref="securityManager"/>
+    </bean> -->
+
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"/>
+        <property name="loginUrl" value="/login.jsp"/>
+        <property name="successUrl" value="/main/init"/>
+        <property name="unauthorizedUrl" value="/login.jsp"/>
+        <property name="filterChainDefinitions">
+            <value>
+                /script/** = anon
+                /login.jsp = anon
+                /login = anon
+                /** = authc
+            </value>
+        </property>
+    </bean>
+    
     <context:component-scan base-package="com.visfull"
         use-default-filters="true">
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
+
 </beans>

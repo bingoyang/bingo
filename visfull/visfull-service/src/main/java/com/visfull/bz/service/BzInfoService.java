@@ -10,6 +10,7 @@ import com.visfull.bz.domain.BzCommunity;
 import com.visfull.bz.domain.BzCustomer;
 import com.visfull.bz.domain.BzCustomerBinder;
 import com.visfull.bz.domain.BzDataTree;
+import com.visfull.bz.domain.BzPositionInfo;
 import com.visfull.bz.domain.City;
 import com.visfull.bz.domain.County;
 import com.visfull.bz.domain.Province;
@@ -170,5 +171,13 @@ public interface BzInfoService {
 	public void updateCommunity(BzCommunity community);
 	
 	public Pageable<BzCommunity> findCommunityPageable(Condition condition,Pageable<BzCommunity> page);
+	
+	public BzCustomerBinder findCustomerBinder(String targetCode,String customerPhone);
+	
+	public List<BzArea> findAreaList(Integer countyId);
+	public List<BzCommunity> findCommunities(Integer areaId);
+	
+	public void addPositionInfo(BzPositionInfo positionInfo);
+	
 	
 }

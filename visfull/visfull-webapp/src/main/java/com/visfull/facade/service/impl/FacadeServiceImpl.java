@@ -23,6 +23,7 @@ import com.visfull.bz.domain.BzDataTree;
 import com.visfull.bz.domain.BzDataTree.DataType;
 import com.visfull.bz.domain.BzDataTree.NodeType;
 import com.visfull.bz.domain.BzOperator;
+import com.visfull.bz.domain.BzPositionInfo;
 import com.visfull.bz.domain.BzPoster;
 import com.visfull.bz.domain.BzServer;
 import com.visfull.bz.domain.BzServiceprovider;
@@ -142,20 +143,39 @@ public class FacadeServiceImpl implements FacadeService {
 					}else{
 						customerServiceBean.setCustomerId(cust.getId());
 					}
-					customerBinder = new BzCustomerBinder();
-					customerBinder.setTargetId(customerBinderBean.getTargetId());
-					customerBinder.setTargetName(customerBinderBean.getTargetName());
-					customerBinder.setTargetType(customerBinderBean.getTargetType());
-					customerBinder.setCustomerId(customerServiceBean.getCustomerId());
-					customerBinder.setCustomerName(customerServiceBean.getCustomerName());
-					customerBinder.setDuration(customerServiceBean.getDuration());
-					customerBinder.setCustomerPhone(customerServiceBean.getCustomerPhone());
-					customerBinder.setServiceInfo(customerServiceBean.getServiceInfo());
-					customerBinder.setServiceDate(customerServiceBean.getServiceDate());
-					customerBinder.setTargetCode(customerBinderBean.getTargetCode());
-					customerBinder.setCreateDate(new Date());
-					
-					bzInfoService.addCustomerBinder(customerBinder);
+					customerBinder = bzInfoService.findCustomerBinder(customerBinderBean.getTargetCode(), customerServiceBean.getCustomerPhone());
+					if(customerBinder!=null){
+						
+						customerBinder.setTargetId(customerBinderBean.getTargetId());
+						customerBinder.setTargetName(customerBinderBean.getTargetName());
+						customerBinder.setTargetType(customerBinderBean.getTargetType());
+						customerBinder.setCustomerId(customerServiceBean.getCustomerId());
+						customerBinder.setCustomerName(customerServiceBean.getCustomerName());
+						customerBinder.setDuration(customerServiceBean.getDuration()+customerBinder.getDuration());
+						customerBinder.setCustomerPhone(customerServiceBean.getCustomerPhone());
+						customerBinder.setServiceInfo(customerBinder.getServiceInfo()+"^"+customerServiceBean.getServiceInfo());
+						customerBinder.setServiceDate(customerServiceBean.getServiceDate());
+						customerBinder.setTargetCode(customerBinderBean.getTargetCode());
+						
+						bzInfoService.updateCustomerBinder(customerBinder);
+						
+					}else{
+						customerBinder = new BzCustomerBinder();
+						customerBinder.setTargetId(customerBinderBean.getTargetId());
+						customerBinder.setTargetName(customerBinderBean.getTargetName());
+						customerBinder.setTargetType(customerBinderBean.getTargetType());
+						customerBinder.setCustomerId(customerServiceBean.getCustomerId());
+						customerBinder.setCustomerName(customerServiceBean.getCustomerName());
+						customerBinder.setDuration(customerServiceBean.getDuration());
+						customerBinder.setCustomerPhone(customerServiceBean.getCustomerPhone());
+						customerBinder.setServiceInfo(customerServiceBean.getServiceInfo());
+						customerBinder.setServiceDate(customerServiceBean.getServiceDate());
+						customerBinder.setTargetCode(customerBinderBean.getTargetCode());
+						customerBinder.setCreateDate(new Date());
+						
+						bzInfoService.addCustomerBinder(customerBinder);
+					}
+
 					
 					List<BzPoster> posters = customerServiceBean.getPosters();
 					if (posters!=null&&!posters.isEmpty()) {
@@ -286,6 +306,15 @@ public class FacadeServiceImpl implements FacadeService {
 		try {
 			serviceprovider.setCreateDate(new Date());
 			bzInfoService.addServiceProvider(serviceprovider);
+			List<BzPoster> posters = serviceprovider.getPosters();
+			if (posters!=null&&!posters.isEmpty()) {
+				for (BzPoster bzPoster : posters) {
+					bzPoster.setCreateDate(new Date());
+					bzPoster.setOwner(serviceprovider.getId());
+					bzPoster.setOwnerType(TargetType.SERVER);
+					bzInfoService.addPoster(bzPoster);
+				}
+			}
 		} catch (Exception e) {
 			logger.debug(ExceptionUtils.getFullStackTrace(e));
 			result.setResultCode("0001");
@@ -344,6 +373,9 @@ public class FacadeServiceImpl implements FacadeService {
 	public void updateServiceProvider(String jsonString) {
 		BzServiceprovider serviceprovider = JsonUtils.fromJson(jsonString, BzServiceprovider.class);
 		bzInfoService.updateServiceProvider(serviceprovider);
+		if(serviceprovider.getPosters()!=null&&!serviceprovider.getPosters().isEmpty()){
+			bzInfoService.updatePosters(serviceprovider.getPosters());
+		}
 	}
 
 	public void updateServer(String jsonString) {
@@ -529,5 +561,82 @@ public class FacadeServiceImpl implements FacadeService {
 			}
 			bzInfoService.deletePosters(posterIdList);
 		}		
+	}
+
+	public ResultBean getOperatorJsonResult(Long opId, String opCode) {
+		ResultBean resultBean = new ResultBean();
+		BzOperator operator = null;
+		try {
+			if (opId !=null && opId >0) {
+				operator = bzInfoService.getBzOperator(opId);
+			}
+			if(opCode!=null&&!"".equals(opCode)){
+				operator = bzInfoService.getOperatorByCode(opCode);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultBean.setResultCode("0001");
+			resultBean.setMessage("获取运营商信息异常！");
+		}
+		
+		resultBean.setResultCode("0000");
+		resultBean.setMessage("获取运营商信息成功！");
+		List<Object> data = new ArrayList<Object>();
+		data.add(operator);
+		resultBean.setDataObjects(data);
+		return resultBean;
+	}
+
+	public ResultBean getServiceProviderJsonResult(Long spId, String spCode) {
+		ResultBean resultBean = new ResultBean();
+		BzServiceprovider serviceProvider = null;
+		try {
+			if (spId !=null && spId >0) {
+				serviceProvider = bzInfoService.getServiceprovider(spId);
+			}
+			if(spCode!=null&&!"".equals(spCode)){
+				serviceProvider = bzInfoService.getServiceproviderByCode(spCode);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultBean.setResultCode("0001");
+			resultBean.setMessage("获取服务提供商信息异常！");
+		}
+		resultBean.setResultCode("0000");
+		resultBean.setMessage("获取服务提供商信息成功！");
+		List<Object> data = new ArrayList<Object>();
+		data.add(serviceProvider);
+		resultBean.setDataObjects(data);
+		return resultBean;
+	}
+
+	public ResultBean getServerJsonResult(Long serverId, String serverCode) {
+		ResultBean resultBean = new ResultBean();
+		BzServer server = null;
+		try {
+			if (serverId !=null && serverId >0) {
+				server = bzInfoService.getBzServer(serverId);
+			}
+			if(serverCode!=null&&!"".equals(serverCode)){
+				server = bzInfoService.getBzServerByCode(serverCode);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultBean.setResultCode("0001");
+			resultBean.setMessage("获取服务人员信息异常！");
+		}
+		resultBean.setResultCode("0000");
+		resultBean.setMessage("获取服务人员信息成功！");
+		List<Object> data = new ArrayList<Object>();
+		data.add(server);
+		resultBean.setDataObjects(data);
+		return resultBean;
+	}
+
+	public void addPositionInfo(String jsonString) {
+		BzPositionInfo positionInfo = new BzPositionInfo();
+		positionInfo.setPositionData(jsonString);
+		positionInfo.setCreateDate(new Date());
+		bzInfoService.addPositionInfo(positionInfo);
 	}
 }

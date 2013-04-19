@@ -66,5 +66,15 @@ public class AreaDaoImpl extends HibernateBaseDaoImpl<BzArea,Integer> implements
         areas = criteria.list();
 		return areas;
 	}
+
+	public List<BzArea> findAreaList(Integer countyId) {
+		List<BzArea> areas = new ArrayList<BzArea>();
+        Pageable<BzArea> page = new Pageable<BzArea>();
+        Criteria criteria =getSession().createCriteria(BzArea.class);
+        criteria.setProjection(null);
+        criteria.add(Restrictions.eq("countyId", countyId));
+        areas = criteria.list();
+		return areas;
+	}
 	
 }
